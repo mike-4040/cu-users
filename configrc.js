@@ -19,13 +19,23 @@ const connectionParam = process.env.DATABASE_URL ? remoteDb : localDb;
 
 const messages = {
   accCreated: 'Congratulations! Account created. You are loged in.',
-  accExistsLoggedIn: 'You have an account already. You are loged in.',
+  accExistsLoggedIn: 'You have an Account already. You are loged in.',
   accExistsWrongPass:
     'You have an account already, but password is wrong, try again.',
   passRequred: 'Password is required',
+  noAccount: 'No Account Found, please Sing Up.',
+  loggedIn: 'You are in!',
+  wrongPass: 'Wrong Password :('
 };
+
+const authRc = {
+  saltRounds: 10 /** Migh move to environment */,
+  expiresIn: '7d',
+};
+
 module.exports = {
   port,
   connectionParam,
   messages,
+  authRc
 };
