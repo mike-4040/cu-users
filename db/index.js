@@ -1,7 +1,6 @@
 const { Client } = require('pg');
-const { localDb, remoteDb } = require('../configrc');
 
-const connectionParam = process.env.DATABASE_URL ? remoteDb : localDb;
+const { connectionParam } = require('../configrc');
 
 const client = new Client(connectionParam);
 
