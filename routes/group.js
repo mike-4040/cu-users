@@ -3,7 +3,7 @@ const router = require('express').Router();
 const controller = require('../controllers/group');
 
 /**
- *  All routes are protected, user_id from JWT
+ *  All routes are protected, user.id from JWT
  */
 
 /** get a list of all groups of a user */
