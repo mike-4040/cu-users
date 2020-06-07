@@ -73,7 +73,7 @@ npm i -g nodemon
 
 ## Good to know
 
-1. Validation can be turned on and of in configrc.js
+1. Validation can be turned **On** and **Off** in configrc.js
 
 
 ## To Do
