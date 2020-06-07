@@ -6,6 +6,7 @@ const { messages } = require('../configrc');
 
 module.exports = {
   signin: async ({ body }, res) => {
+    /** extra layer, body is validated already */
     if (!body.password) return res.json({ msg: messages.passRequred });
     const query = `SELECT id, name, email, password
                    FROM public.user
@@ -57,7 +58,7 @@ module.exports = {
               msg: messages.accExistsWrongPass,
             });
         else {
-          const {id, err} = await updateUser(hashPassword(body.password), body.name, dbUser.id);
+          const { id, err } = await updateUser(hashPassword(body.password), body.name, dbUser.id);
           if (err) return res.json({ msg: messages.dbError, err });
           return res.json({
             msg: messages.accCreated,
@@ -65,7 +66,7 @@ module.exports = {
           });
         }
       }
-      
+
       /** no user in db, creating an account */
 
       const { id, err } = await createAccount(body.email, body.name, hashPassword(body.password));
