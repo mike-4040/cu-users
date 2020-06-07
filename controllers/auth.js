@@ -1,5 +1,6 @@
 const db = require('../db');
 const updateUser = require('../db/updateUser');
+const createAccount = require('../db/createAccount');
 const { checkPassword, issueToken, hashPassword } = require('../utils/auth');
 const { messages } = require('../configrc');
 
@@ -36,12 +37,12 @@ module.exports = {
   signup: async ({ body }, res) => {
     /** extra layer, body is validated already */
     if (!body.password) return res.json({ msg: messages.passRequred });
-    const query1 = `SELECT id, name, email, password
+    const query = `SELECT id, name, email, password
                    FROM public.user
                    WHERE email = $1`;
-    const values1 = [body.email];
+    const values = [body.email];
     try {
-      const result = await db.query(query1, values1);
+      const result = await db.query(query, values);
       const dbUser = result.rows[0];
       if (dbUser) {
         /** @todo add checking User Name against db */
@@ -56,36 +57,24 @@ module.exports = {
               msg: messages.accExistsWrongPass,
             });
         else {
-          const dbRes = await updateUser(
-            hashPassword(body.password),
-            body.name,
-            dbUser.id
-          );
-          if (!dbRes.id)
-            return res.json({ msg: messages.dbError, err: dbRes.err });
+          const {id, err} = await updateUser(hashPassword(body.password), body.name, dbUser.id);
+          if (err) return res.json({ msg: messages.dbError, err });
           return res.json({
             msg: messages.accCreated,
-            token: issueToken({ ...body, id: dbRes.id }),
+            token: issueToken({ ...body, id }),
           });
         }
       }
-      const query = `INSERT INTO public.user (name, email, password)
-         VALUES ( $1, $2, $3)
-         RETURNING id;`;
-      const values = [body.name, body.email, hashPassword(body.password)];
-      try {
-        const result = await db.query(query, values);
-        const id = result.rows[0].id;
-        return res.json({
-          msg: messages.accCreated,
-          token: issueToken({ ...body, id }),
-        });
-      } catch (err) {
-        console.log(err.detail);
-        res.status(500).send(err.detail);
-      }
+      
+      /** no user in db, creating an account */
+
+      const { id, err } = await createAccount(body.email, body.name, hashPassword(body.password));
+      if (err) return res.json({ msg: messages.dbError, err });
+      return res.json({
+        msg: messages.accCreated,
+        token: issueToken({ ...body, id }),
+      });
     } catch (err) {
-      //catch of getting user from db
       console.log(err.detail);
       return res.status(500).send(err.detail);
     }
