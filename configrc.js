@@ -39,9 +39,14 @@ const authRc = {
   expiresIn: '7d',
 };
 
+/** Turn on and of validation */
+
+const validate = false;
+
 module.exports = {
   port,
   connectionParam,
   messages,
-  authRc
+  authRc,
+  validate
 };

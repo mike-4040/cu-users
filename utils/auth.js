@@ -1,12 +1,8 @@
-/**
- * In a large project utils can be in separate folder
- */
-
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const exJwt = require('express-jwt');
 
-const { authRc } = require('./configrc');
+const { authRc } = require('../configrc');
 
 const hashPassword = password =>
   bcrypt.hashSync(password, parseInt(authRc.saltRounds));

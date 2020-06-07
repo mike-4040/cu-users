@@ -1,5 +1,5 @@
 const db = require('../db');
-const { checkPassword, issueToken, hashPassword } = require('../utils');
+const { checkPassword, issueToken, hashPassword } = require('../utils/auth');
 const { messages } = require('../configrc');
 
 module.exports = {
