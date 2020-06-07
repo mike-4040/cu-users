@@ -73,10 +73,22 @@ const addToGroup = async ({ body, user, params }, res) => {
 };
 /** get a list of all users in a group */
 const userList = async ({ params, user }, res) => {
-  const { rows, err } = await getGrupUsers(user.id, params.id);
-  if (err) return res.json({ msg: messages.dbError, err });
-  if (!rows.length) res.json({ msg: messages.groupEmpty });
-  res.json({ msg: messages.groupUsers })
+  try {
+    const { rows, err } = await getGrupUsers(user.id, params.id);
+    if (err) return res.json({ msg: messages.dbError, err });
+    /** @todo
+     *   Current implementation doesn't specify why group is emply, it coul be 
+     * - group is empty
+     * - group belongs to another Account
+     */
+    if (!rows.length) return res.json({ msg: messages.groupEmpty });
+    const group = { name: rows[0].group_name, id: rows[0].group_id };
+    const users = rows.map( user => ({ id: user.user_id, name: user.user_name || 'Nobody knows :)', email: user.email}))
+    res.json({ msg: messages.groupUsers, group, users });
+  } catch (err) {
+    console.log(err.detail, err);
+    return res.status(500).send(err.detail);
+  }
 };
 
 module.exports = {
