@@ -83,6 +83,8 @@ The best way to play with it is to use tools like postman.
 
 Follow simple instructions in Requests description.
 
+[API documentation](https://documenter.getpostman.com/view/6976266/SztK2QEb)
+
 ## Good to know
 
 Validation can be turned **On** and **Off** in configrc.js
