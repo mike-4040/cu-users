@@ -3,6 +3,7 @@ const addUser = require('../db/addUser');
 const getUserByMail = require('../db/getUserByMail');
 const getUserGrupsUsers = require('../db/getUserGrupsUsers');
 const addUserToGroup = require('../db/addUserToGroup');
+const getGrupUsers = require('../db/getGrupUsers');
 
 const { messages } = require('../configrc');
 
@@ -70,8 +71,13 @@ const addToGroup = async ({ body, user, params }, res) => {
     return res.status(500).send(err.detail);
   }
 };
-
-const userList = ({ body }, res) => res.json({ message: 'userList', ...body });
+/** get a list of all users in a group */
+const userList = async ({ params, user }, res) => {
+  const { rows, err } = await getGrupUsers(user.id, params.id);
+  if (err) return res.json({ msg: messages.dbError, err });
+  if (!rows.length) res.json({ msg: messages.groupEmpty });
+  res.json({ msg: messages.groupUsers })
+};
 
 module.exports = {
   userGroups,
