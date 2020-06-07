@@ -1,6 +1,6 @@
 const db = require('./index');
 
-const getUserGrupsUsers = async (user_id, group_id) => {
+const getUserGrupsUsers = async (userId, groupId) => {
   try {
     const query =
       `SELECT
@@ -12,7 +12,7 @@ const getUserGrupsUsers = async (user_id, group_id) => {
 	      "group"
       LEFT JOIN user_in_group ON user_in_group.group_id = "group".id
       WHERE "group".owner_id = $1 and "group".id = $2;`;
-    const values = [user_id, group_id];
+    const values = [userId, groupId];
     const { rows } = await db.query(query, values);
     return { rows };
   } catch (err) {

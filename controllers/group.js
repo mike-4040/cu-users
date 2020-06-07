@@ -77,7 +77,7 @@ const userList = async ({ params, user }, res) => {
     const { rows, err } = await getGrupUsers(user.id, params.id);
     if (err) return res.json({ msg: messages.dbError, err });
     /** @todo
-     *   Current implementation doesn't specify why group is emply, it coul be 
+     *   Current implementation doesn't specify why group is empty, it could be 
      * - group is empty
      * - group belongs to another Account
      */
