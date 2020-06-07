@@ -27,7 +27,9 @@ const messages = {
   loggedIn: 'You are in!',
   wrongPass: 'Wrong Password :(',
   groupCreated: 'Group created successfuly.',
-  groupList: 'Here is a list of your Groups.'
+  groupList: 'Here is a list of your Groups.',
+  dbError: 'Database Error',
+  notYourGroup: 'This is not your group, please double check'
 };
 
 const authRc = {
