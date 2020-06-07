@@ -24,6 +24,9 @@ const schemasShort = {
     email: emailShort,
     password: string,
   }),
+  addUser: Joi.object({
+    email: emailShort,
+  }),
 };
 
 const schemasLong = {
@@ -36,6 +39,9 @@ const schemasLong = {
     name: name,
     email: email,
     password: password,
+  }),
+  addUser: Joi.object({
+    email: email,
   }),
 };
 module.exports = validate ? schemasLong : schemasShort;

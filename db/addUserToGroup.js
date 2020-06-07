@@ -8,7 +8,7 @@ const addUserToGroup = async (user_id, group_id) => {
     RETURNING id;`;
     const values = [user_id, group_id];
     const { rows } = await db.query(query, values);
-    return { id: rows[0].id };
+    return { recordId: rows[0].id };
   } catch (err) {
     console.log('addUserToGroup', err);
     return { err: err.detail || err.code };
