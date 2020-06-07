@@ -1,4 +1,5 @@
 const db = require('../db');
+const updateUser = require('../db/updateUser');
 const { checkPassword, issueToken, hashPassword } = require('../utils/auth');
 const { messages } = require('../configrc');
 
@@ -33,6 +34,7 @@ module.exports = {
     }
   },
   signup: async ({ body }, res) => {
+    /** extra layer, body is validated already */
     if (!body.password) return res.json({ msg: messages.passRequred });
     const query1 = `SELECT id, name, email, password
                    FROM public.user
@@ -54,21 +56,17 @@ module.exports = {
               msg: messages.accExistsWrongPass,
             });
         else {
-          const query2 = `UPDATE public.user
-                        SET password = $1
-                        WHERE id=$2`;
-          const values2 = [hashPassword(body.password), dbUser.id];
-          try {
-            const result = await db.query(query2, values2);
-            const id = result.rows[0].id;
-            return res.json({
-              msg: messages.accCreated,
-              token: issueToken({ ...dbUser, id }),
-            });
-          } catch (err) {
-            console.log(err.detail);
-            res.status(500).send(err.detail);
-          }
+          const dbRes = await updateUser(
+            hashPassword(body.password),
+            body.name,
+            dbUser.id
+          );
+          if (!dbRes.id)
+            return res.json({ msg: messages.dbError, err: dbRes.err });
+          return res.json({
+            msg: messages.accCreated,
+            token: issueToken({ ...body, id: dbRes.id }),
+          });
         }
       }
       const query = `INSERT INTO public.user (name, email, password)
