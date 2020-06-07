@@ -70,3 +70,13 @@ You might need to install `nodemon`.
 ```
 npm i -g nodemon
 ```
+
+## Good to know
+
+1. Validation can be turned **On** and **Off** in configrc.js
+
+
+## To Do
+
+1. Strict validation on all routes.
+1. Custom validation messages.

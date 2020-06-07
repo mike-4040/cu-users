@@ -3,7 +3,7 @@ const express = require('express');
 
 const routes = require('./routes');
 const { port } = require('./configrc');
-const { errMiddle} = require('./utils');
+const { errMiddle} = require('./utils/auth');
 
 const app = express();
 
