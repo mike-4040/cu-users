@@ -1,39 +1,32 @@
-const db = require('../db');
+const addGroup = require('../db/addGroup');
 const addUser = require('../db/addUser');
 const getUserByMail = require('../db/getUserByMail');
 const getUserGrupsUsers = require('../db/getUserGrupsUsers');
 const addUserToGroup = require('../db/addUserToGroup');
 const getGrupUsers = require('../db/getGrupUsers');
+const getUserGroups = require('../db/getUserGroups');
 
 const { messages } = require('../configrc');
 
 const userGroups = async ({ user }, res) => {
-  const query = `SELECT id, name
-    FROM public.group
-    WHERE owner_id = $1
-    ORDER BY name ASC ;`;
-  const values = [user.id];
   try {
-    const { rows } = await db.query(query, values);
+    const { rows, err } = await getUserGroups(user.id);
+    if (err) return res.json({ msg: messages.dbError, err });
     return res.json({ msg: messages.groupList, rows });
   } catch (err) {
-    console.log(err.detail, err);
-    return res.status(500).send(err.detail);
+    console.log(userGroups, err);
+    return res.status(500).send(err);
   }
 };
 
 const createGroup = async ({ body, user }, res) => {
-  const query = `INSERT INTO public.group (name, owner_id)
-    VALUES ( $1, $2)
-    RETURNING id;`;
-  const values = [body.name, user.id];
   try {
-    const { rows } = await db.query(query, values);
-    const id = rows[0];
-    return res.json({ msg: messages.groupCreated, ...id, ...body });
+    const { id, err } = await addGroup(body.name, user.id);
+    if (err) return res.json({ msg: messages.dbError, err });
+    return res.json({ msg: messages.groupCreated, id });
   } catch (err) {
-    console.log(err.detail, err);
-    return res.status(500).send(err.detail);
+    console.log('createGroup', err);
+    return res.status(500).send(err);
   }
 };
 
@@ -44,7 +37,7 @@ const addToGroup = async ({ body, user, params }, res) => {
     const { user: dbUser1, err1 } = await getUserByMail(body.email);
     if (err1) return res.json({ msg: messages.dbError, err: err1 });
     let id = dbUser1 && dbUser1.id;
-    
+
     /** If not => add the User to db  */
     if (!id) {
       const dbRes = await addUser(body.email);
@@ -66,8 +59,8 @@ const addToGroup = async ({ body, user, params }, res) => {
     if (err2) return res.json({ msg: messages.dbError, err2 });
     return res.json({ msg: `User with email ${body.email} added to a Group #${groupId} with ID ${recordId} ` });
   } catch (err) {
-    console.log(err.detail, err);
-    return res.status(500).send(err.detail);
+    console.log('addToGroup', err);
+    return res.status(500).send(err);
   }
 };
 /** get a list of all users in a group */
@@ -89,8 +82,8 @@ const userList = async ({ params, user }, res) => {
     }));
     res.json({ msg: messages.groupUsers, group, users });
   } catch (err) {
-    console.log(err.detail, err);
-    return res.status(500).send(err.detail);
+    console.log('userList', err);
+    return res.status(500).send(err);
   }
 };
 
