@@ -41,10 +41,10 @@ const addToGroup = async ({ body, user, params }, res) => {
   const groupId = params.id;
   try {
     /** Check if the User in the db already */
-    const dbRes = await getUserByMail(body.email);
-    if (dbRes.err) return res.json({ msg: messages.dbError, err: dbRes.err });
-    let id = dbRes.id;
-
+    const { user: dbUser1, err1 } = await getUserByMail(body.email);
+    if (err1) return res.json({ msg: messages.dbError, err: err1 });
+    let id = dbUser1 && dbUser1.id;
+    
     /** If not => add the User to db  */
     if (!id) {
       const dbRes = await addUser(body.email);
@@ -58,10 +58,9 @@ const addToGroup = async ({ body, user, params }, res) => {
 
     /** Check if the Group belong to the Current User */
     if (rows.length === 0) return res.json({ msg: messages.notYourGroup });
-    
+
     /** Chech if the User in the Group already */
-    if (rows.some(el => el.user_id === id))
-      return res.json({ msg: 'User alredy in the Group' });
+    if (rows.some(el => el.user_id === id)) return res.json({ msg: 'User alredy in the Group' });
 
     const { recordId, err2 } = await addUserToGroup(id, groupId);
     if (err2) return res.json({ msg: messages.dbError, err2 });
@@ -77,13 +76,17 @@ const userList = async ({ params, user }, res) => {
     const { rows, err } = await getGrupUsers(user.id, params.id);
     if (err) return res.json({ msg: messages.dbError, err });
     /** @todo
-     *   Current implementation doesn't specify why group is empty, it could be 
+     *   Current implementation doesn't specify why group is empty, it could be
      * - group is empty
      * - group belongs to another Account
      */
     if (!rows.length) return res.json({ msg: messages.groupEmpty });
     const group = { name: rows[0].group_name, id: rows[0].group_id };
-    const users = rows.map( user => ({ id: user.user_id, name: user.user_name || 'Nobody knows :)', email: user.email}))
+    const users = rows.map(user => ({
+      id: user.user_id,
+      name: user.user_name || 'Nobody knows :)',
+      email: user.email,
+    }));
     res.json({ msg: messages.groupUsers, group, users });
   } catch (err) {
     console.log(err.detail, err);
