@@ -1,6 +1,6 @@
 const db = require('./index');
 
-const getGrupUsers = async (user_id, group_id) => {
+const getGroupUsers = async (user_id, group_id) => {
   try {
     const query = `SELECT
 	    "group".id AS group_id,
@@ -18,9 +18,9 @@ const getGrupUsers = async (user_id, group_id) => {
     const { rows } = await db.query(query, values);
     return { rows };
   } catch (err) {
-    console.log('getGrupUsers', err);
+    console.log('getGroupUsers', err);
     return { err: err.detail || err.code };
   }
 };
 
-module.exports = getGrupUsers;
+module.exports = getGroupUsers;

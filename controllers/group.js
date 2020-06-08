@@ -1,9 +1,9 @@
 const addGroup = require('../db/addGroup');
 const addUser = require('../db/addUser');
 const getUserByMail = require('../db/getUserByMail');
-const getUserGrupsUsers = require('../db/getUserGrupsUsers');
+const getUserGroupsUsers = require('../db/getUserGroupsUsers');
 const addUserToGroup = require('../db/addUserToGroup');
-const getGrupUsers = require('../db/getGrupUsers');
+const getGroupUsers = require('../db/getGroupUsers');
 const getUserGroups = require('../db/getUserGroups');
 
 const { messages } = require('../configrc');
@@ -14,7 +14,7 @@ const userGroups = async ({ user }, res) => {
     if (err) return res.json({ msg: messages.dbError, err });
     return res.json({ msg: messages.groupList, rows });
   } catch (err) {
-    console.log(userGroups, err);
+    console.log('userGroups', err);
     return res.status(500).send(err);
   }
 };
@@ -46,7 +46,7 @@ const addToGroup = async ({ body, user, params }, res) => {
     }
 
     /** Get list of all Users in the Group */
-    const { rows, err } = await getUserGrupsUsers(user.id, groupId);
+    const { rows, err } = await getUserGroupsUsers(user.id, groupId);
     if (err) return res.json({ msg: messages.dbError, err });
 
     /** Check if the Group belong to the Current User */
@@ -66,7 +66,7 @@ const addToGroup = async ({ body, user, params }, res) => {
 /** get a list of all users in a group */
 const userList = async ({ params, user }, res) => {
   try {
-    const { rows, err } = await getGrupUsers(user.id, params.id);
+    const { rows, err } = await getGroupUsers(user.id, params.id);
     if (err) return res.json({ msg: messages.dbError, err });
     /** @todo
      *   Current implementation doesn't specify why group is empty, it could be
