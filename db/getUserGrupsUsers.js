@@ -1,6 +1,6 @@
 const db = require('./index');
 
-const getUserGrupsUsers = async (userId, groupId) => {
+const getUserGroupsUsers = async (userId, groupId) => {
   try {
     const query =
       `SELECT
@@ -21,4 +21,4 @@ const getUserGrupsUsers = async (userId, groupId) => {
   }
 };
 
-module.exports = getUserGrupsUsers;
+module.exports = getUserGroupsUsers;

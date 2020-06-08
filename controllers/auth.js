@@ -18,7 +18,7 @@ module.exports = {
         token: issueToken(dbUser),
       });
     } catch (err) {
-      console.log(err);
+      console.log('signin', err);
       return res.status(500).send(err);
     }
   },
@@ -61,7 +61,7 @@ module.exports = {
         token: issueToken({ ...body, id }),
       });
     } catch (err) {
-      console.log(err);
+      console.log('signup', err);
       return res.status(500).send(err);
     }
   },

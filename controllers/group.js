@@ -14,7 +14,7 @@ const userGroups = async ({ user }, res) => {
     if (err) return res.json({ msg: messages.dbError, err });
     return res.json({ msg: messages.groupList, rows });
   } catch (err) {
-    console.log(userGroups, err);
+    console.log('userGroups', err);
     return res.status(500).send(err);
   }
 };
