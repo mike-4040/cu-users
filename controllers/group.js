@@ -50,7 +50,7 @@ const addToGroup = async ({ body, user, params }, res) => {
     if (err) return res.json({ msg: messages.dbError, err });
 
     /** Check if the Group belong to the Current User */
-    if (rows.length === 0) return res.json({ msg: messages.notYourGroup });
+    if (rows.length === 0) return res.json({ msg: messages.groupNotOwner });
 
     /** Chech if the User in the Group already */
     if (rows.some(el => el.user_id === id)) return res.json({ msg: 'User alredy in the Group' });
@@ -63,17 +63,19 @@ const addToGroup = async ({ body, user, params }, res) => {
     return res.status(500).send(err);
   }
 };
+
 /** get a list of all users in a group */
 const userList = async ({ params, user }, res) => {
   try {
-    const { rows, err } = await getGroupUsers(user.id, params.id);
+    const { rows, err } = await getGroupUsers(params.id);
     if (err) return res.json({ msg: messages.dbError, err });
-    /** @todo
-     *   Current implementation doesn't specify why group is empty, it could be
-     * - group is empty
-     * - group belongs to another Account
-     */
-    if (!rows.length) return res.json({ msg: messages.groupEmpty });
+
+    if (!rows.length) return res.json({ msg: messages.groupNotExists });
+
+    if (rows[0].owner_id !== user.id) return res.json({ msg: messages.groupNotOwner });
+
+    if (!rows[0].user_id) return res.json({ msg: messages.groupEmpty });
+
     const group = { name: rows[0].group_name, id: rows[0].group_id };
     const users = rows.map(user => ({
       id: user.user_id,

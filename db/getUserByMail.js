@@ -2,7 +2,8 @@ const db = require('./index');
 
 const getUserByMail = async email => {
   try {
-    const query = `SELECT id, name, email, password
+    const query = `
+      SELECT id, name, email, password
       FROM public.user
       WHERE email = $1;`;
     const values = [email];
