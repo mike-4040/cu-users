@@ -29,9 +29,9 @@ const messages = {
   groupCreated: 'Group created successfuly.',
   groupList: 'Here is a list of your Groups.',
   dbError: 'Database Error',
-  notYourGroup: 'This is not your group, please double check.',
   groupEmpty: 'This Group is empty.',
-  groupUsers: 'Here is a list of Users in this Group'
+  groupUsers: 'Here is a list of Users in this Group',
+  groupNotOwner: 'Hey, this is not your Group! What are you doing here?'
 };
 
 const authRc = {
