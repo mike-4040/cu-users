@@ -2,7 +2,8 @@ const db = require('./index');
 
 const addGroup = async (name, ownerId) => {
   try {
-    const query = `INSERT INTO public.group (name, owner_id)
+    const query = `
+    INSERT INTO public.group (name, owner_id)
       VALUES ( $1, $2)
       RETURNING id;`;
     const values = [name, ownerId];

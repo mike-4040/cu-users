@@ -70,9 +70,11 @@ const userList = async ({ params, user }, res) => {
     const { rows, err } = await getGroupUsers(params.id);
     if (err) return res.json({ msg: messages.dbError, err });
 
-    if (!rows.length) return res.json({ msg: messages.groupEmpty });
+    if (!rows.length) return res.json({ msg: messages.groupNotExists });
 
     if (rows[0].owner_id !== user.id) return res.json({ msg: messages.groupNotOwner });
+
+    if (!rows[0].user_id) return res.json({ msg: messages.groupEmpty });
 
     const group = { name: rows[0].group_name, id: rows[0].group_id };
     const users = rows.map(user => ({

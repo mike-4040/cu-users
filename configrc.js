@@ -20,18 +20,18 @@ const connectionParam = process.env.DATABASE_URL ? remoteDb : localDb;
 const messages = {
   accCreated: 'Congratulations! Account created. You are loged in.',
   accExistsLoggedIn: 'You have an Account already. You are loged in.',
-  accExistsWrongPass:
-    'You have an account already, but password is wrong, try again.',
-  passRequred: 'Password is required',
-  noAccount: 'No Account Found, please Sing Up.',
-  loggedIn: 'You are in!',
-  wrongPass: 'Wrong Password :(',
-  groupCreated: 'Group created successfuly.',
-  groupList: 'Here is a list of your Groups.',
+  accExistsWrongPass: 'You have an Account, but password is wrong, try again.',
   dbError: 'Database Error',
+  groupCreated: 'Group created successfuly.',
   groupEmpty: 'This Group is empty.',
+  groupList: 'Here is a list of your Groups.',
+  groupNotExists: 'There is no such Group :(',
+  groupNotOwner: 'Hey, this is not your Group! What are you doing here?',
   groupUsers: 'Here is a list of Users in this Group',
-  groupNotOwner: 'Hey, this is not your Group! What are you doing here?'
+  loggedIn: 'You are in!',
+  noAccount: 'No Account Found, please Sing Up.',
+  passRequred: 'Password is required',
+  wrongPass: 'Wrong Password :(',
 };
 
 const authRc = {
@@ -48,5 +48,5 @@ module.exports = {
   connectionParam,
   messages,
   authRc,
-  validate
+  validate,
 };

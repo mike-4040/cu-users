@@ -12,8 +12,8 @@ const getGroupUsers = async group_id => {
         "user".email
       FROM
         user_in_group
-      JOIN "group" ON user_in_group.group_id = "group".id
-      JOIN "user" ON user_in_group.user_id = "user".id
+      RIGHT JOIN "group" ON user_in_group.group_id = "group".id
+      LEFT JOIN "user" ON user_in_group.user_id = "user".id
       WHERE "group".id = $1
       ORDER BY "user".name ASC;`;
     const values = [group_id];

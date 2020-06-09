@@ -93,4 +93,4 @@ Validation can be turned **On** and **Off** in configrc.js
 
 1. Strict validation on all routes.
 1. Custom validation messages.
-1. Refactor all sql requests to separate files 
+3. jsdoc.
